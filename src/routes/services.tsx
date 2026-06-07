@@ -6,7 +6,7 @@ import { Code2, Smartphone, Brain, ShoppingBag, Search, Sparkles, Cloud, ArrowRi
 export const Route = createFileRoute("/services")({
   head: () => ({
     meta: [
-      { title: "Services — Web, Mobile, AI, Shopify, SEO & Branding | 4NodeTech" },
+      { title: "Services — Web, Mobile, AI & Growth | 4NodeTech" },
       { name: "description", content: "Full-stack technology services: web and mobile development, AI solutions, Shopify, SEO and branding for modern businesses." },
       { property: "og:title", content: "Services | 4NodeTech" },
       { property: "og:description", content: "End-to-end product, AI and growth services from a senior team." },
@@ -32,6 +32,7 @@ function Services() {
     <Layout>
       <Section>
         <SectionHeader
+          as="h1"
           eyebrow="Services"
           title={<>Everything you need to <span className="text-gradient-brand">build, automate</span> and scale</>}
           description="One senior team across product, engineering, AI and growth — engaged the way you need."
