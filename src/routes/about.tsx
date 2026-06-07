@@ -29,6 +29,7 @@ function About() {
     <Layout>
       <Section>
         <SectionHeader
+          as="h1"
           eyebrow="Our story"
           title={<>A <span className="text-gradient-brand">family‑founded</span> technology studio</>}
           description="Built by engineers and designers who believe great software comes from small, senior, deeply aligned teams."

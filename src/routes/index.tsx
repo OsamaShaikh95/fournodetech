@@ -9,7 +9,7 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "4NodeTech — Building Digital Products, AI Solutions & Growth Engines" },
+      { title: "4NodeTech — Digital Products, AI & Growth Engines" },
       { name: "description", content: "We help startups and businesses launch, automate, and scale through technology, design, and AI." },
       { property: "og:title", content: "4NodeTech — Building Digital Products & AI" },
       { property: "og:description", content: "Software, AI and digital growth agency for modern businesses." },

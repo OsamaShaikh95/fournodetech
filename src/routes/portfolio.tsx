@@ -31,6 +31,7 @@ function Portfolio() {
     <Layout>
       <Section>
         <SectionHeader
+          as="h1"
           eyebrow="Selected work"
           title={<>Products we've <span className="text-gradient-brand">shipped</span></>}
           description="A snapshot of recent work across product, AI and growth. Detailed case studies available on request."
