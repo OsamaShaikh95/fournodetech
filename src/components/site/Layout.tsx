@@ -11,6 +11,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <main className="flex-1 pt-28">{children}</main>
       <Footer />
       <BackToTop />
+      <CustomCursor />
     </div>
   );
 }
