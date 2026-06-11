@@ -1,6 +1,21 @@
 import { useEffect, useRef } from "react";
 
-export function InteractiveDots({ className = "" }: { className?: string }) {
+export function InteractiveDots({
+  className = "",
+  src = "/jinada-mark.png",
+  size = 560,
+  step = 5,
+  threshold = 60,
+}: {
+  className?: string;
+  src?: string;
+  /** Rendered logo size in CSS px */
+  size?: number;
+  /** Sample every N pixels of the source image — smaller = denser */
+  step?: number;
+  /** Alpha cutoff (0-255) for which pixels become dots */
+  threshold?: number;
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -16,13 +31,12 @@ export function InteractiveDots({ className = "" }: { className?: string }) {
 
     type Dot = { x: number; y: number; ox: number; oy: number; vx: number; vy: number };
     let dots: Dot[] = [];
-    const spacing = 14;
-    const radius = 110;
-    const force = 30;
+    const radius = 90;
+    const force = 26;
 
     const mouse = { x: -9999, y: -9999, active: false };
 
-    const build = () => {
+    const resize = () => {
       const rect = parent.getBoundingClientRect();
       width = rect.width;
       height = rect.height;
@@ -30,24 +44,69 @@ export function InteractiveDots({ className = "" }: { className?: string }) {
       canvas.height = height * dpr;
       canvas.style.width = width + "px";
       canvas.style.height = height + "px";
-      ctx.scale(dpr, dpr);
-
-      dots = [];
-      const cols = Math.ceil(width / spacing);
-      const rows = Math.ceil(height / spacing);
-      const offX = (width - (cols - 1) * spacing) / 2;
-      const offY = (height - (rows - 1) * spacing) / 2;
-      for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-          const x = offX + i * spacing;
-          const y = offY + j * spacing;
-          dots.push({ x, y, ox: x, oy: y, vx: 0, vy: 0 });
-        }
-      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      repositionDots();
     };
 
-    build();
-    const ro = new ResizeObserver(build);
+    const repositionDots = () => {
+      if (!dots.length) return;
+      // Re-center the rest-positions around the current canvas
+      // (dots are built once from image; we shift their origin to center)
+      const cx = width / 2;
+      const cy = height / 2;
+      const off = (canvas as any)._centerOffset as { x: number; y: number } | undefined;
+      if (!off) return;
+      const dx = cx - off.x;
+      const dy = cy - off.y;
+      for (const d of dots) {
+        d.ox += dx;
+        d.oy += dy;
+        d.x += dx;
+        d.y += dy;
+      }
+      (canvas as any)._centerOffset = { x: cx, y: cy };
+    };
+
+    const buildDotsFromImage = (img: HTMLImageElement) => {
+      // Draw image at `size` into an offscreen canvas, then sample alpha
+      const off = document.createElement("canvas");
+      const scale = size / Math.max(img.width, img.height);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      off.width = w;
+      off.height = h;
+      const octx = off.getContext("2d")!;
+      octx.drawImage(img, 0, 0, w, h);
+      const data = octx.getImageData(0, 0, w, h).data;
+
+      const cx = width / 2 - w / 2;
+      const cy = height / 2 - h / 2;
+      const built: Dot[] = [];
+      for (let y = 0; y < h; y += step) {
+        for (let x = 0; x < w; x += step) {
+          const a = data[(y * w + x) * 4 + 3];
+          if (a > threshold) {
+            // tiny jitter so it feels like dust, not a grid
+            const jx = (Math.random() - 0.5) * step * 0.6;
+            const jy = (Math.random() - 0.5) * step * 0.6;
+            const px = cx + x + jx;
+            const py = cy + y + jy;
+            built.push({ x: px, y: py, ox: px, oy: py, vx: 0, vy: 0 });
+          }
+        }
+      }
+      dots = built;
+      (canvas as any)._centerOffset = { x: width / 2, y: height / 2 };
+    };
+
+    resize();
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => buildDotsFromImage(img);
+    img.src = src;
+
+    const ro = new ResizeObserver(resize);
     ro.observe(parent);
 
     const onMove = (e: MouseEvent) => {
@@ -77,7 +136,6 @@ export function InteractiveDots({ className = "" }: { className?: string }) {
           d.vx += Math.cos(ang) * f * 0.08;
           d.vy += Math.sin(ang) * f * 0.08;
         }
-        // spring back
         d.vx += (d.ox - d.x) * 0.06;
         d.vy += (d.oy - d.y) * 0.06;
         d.vx *= 0.82;
@@ -87,10 +145,10 @@ export function InteractiveDots({ className = "" }: { className?: string }) {
 
         const near = mouse.active && dist < radius;
         ctx.beginPath();
-        ctx.arc(d.x, d.y, near ? 1.3 : 0.9, 0, Math.PI * 2);
+        ctx.arc(d.x, d.y, near ? 1.4 : 0.95, 0, Math.PI * 2);
         ctx.fillStyle = near
-          ? `rgba(120, 200, 255, ${0.5 + (1 - dist / radius) * 0.5})`
-          : "rgba(100, 160, 230, 0.35)";
+          ? `rgba(120, 200, 255, ${0.65 + (1 - dist / radius) * 0.35})`
+          : "rgba(91, 155, 255, 0.55)";
         ctx.fill();
       }
       raf = requestAnimationFrame(tick);
@@ -103,7 +161,7 @@ export function InteractiveDots({ className = "" }: { className?: string }) {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseleave", onLeave);
     };
-  }, []);
+  }, [src, size, step, threshold]);
 
   return (
     <canvas
