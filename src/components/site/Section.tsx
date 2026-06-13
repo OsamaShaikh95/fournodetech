@@ -33,13 +33,13 @@ export function SectionHeader({
   return (
     <div className={`max-w-2xl ${center ? "mx-auto text-center" : ""} mb-14`}>
       {eyebrow && (
-        <div className={`inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-muted-foreground mb-4`}>
+        <div className={`inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-foreground mb-4`}>
           <span className="h-1.5 w-1.5 rounded-full bg-[var(--neon-cyan)] animate-pulse-glow" />
           {eyebrow}
         </div>
       )}
       <Heading className="text-3xl sm:text-5xl font-semibold tracking-tight">{title}</Heading>
-      {description && <p className="mt-4 text-muted-foreground text-base sm:text-lg">{description}</p>}
+      {description && <p className="mt-4 text-foreground text-base sm:text-lg">{description}</p>}
     </div>
   );
 }
