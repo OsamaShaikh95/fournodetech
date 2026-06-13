@@ -58,10 +58,7 @@ function Home() {
             <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-blue)] animate-pulse-glow" />
             Websites • Apps • AI Automation
           </div>
-          <h1
-            style={{ fontFamily: '"Talina", "Space Grotesk", system-ui, sans-serif' }}
-            className="mt-6 text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight leading-[1.05] animate-fade-up"
-          >
+          <h1 className="mt-6 text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight leading-[1.05] animate-fade-up">
             <span className="text-gradient-brand animate-gradient">Technology</span> That Helps<br className="hidden sm:block" />
             Your Business Work Smarter
           </h1>
