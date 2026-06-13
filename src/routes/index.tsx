@@ -10,10 +10,10 @@ import { InteractiveDots } from "@/components/site/InteractiveDots";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Jinada Tech — Digital Products, AI & Growth Systems" },
-      { name: "description", content: "Jinada Tech helps modern businesses launch, automate, and scale through websites, mobile apps, AI, SEO, and digital marketing." },
-      { property: "og:title", content: "Jinada Tech — Build. Automate. Scale." },
-      { property: "og:description", content: "Building digital products, AI solutions, and growth systems for modern businesses." },
+      { title: "Jinada Tech — Technology That Helps Your Business Work Smarter" },
+      { name: "description", content: "We partner with startups and businesses to create fast, modern software that delivers real business results." },
+      { property: "og:title", content: "Jinada Tech — Websites • Apps • AI Automation" },
+      { property: "og:description", content: "We partner with startups and businesses to create fast, modern software that delivers real business results." },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
