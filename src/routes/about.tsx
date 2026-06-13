@@ -69,7 +69,7 @@ function About() {
           <div className="relative grid md:grid-cols-2 gap-10 items-center">
             <div>
               <h3 className="text-2xl sm:text-3xl font-semibold">
-                Build. <span className="text-gradient-brand">Automate.</span> Scale.
+                Websites • <span className="text-gradient-brand">Apps</span> • AI Automation
               </h3>
               <p className="mt-4 text-muted-foreground text-sm leading-relaxed">
                 Three pillars guide every project: we build with modern technology, automate the boring
